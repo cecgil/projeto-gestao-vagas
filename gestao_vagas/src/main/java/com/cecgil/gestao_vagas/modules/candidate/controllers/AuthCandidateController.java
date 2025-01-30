@@ -1,10 +1,10 @@
-package com.cecgil.gestao_vagas.modules.company.controller;
+package com.cecgil.gestao_vagas.modules.candidate.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cecgil.gestao_vagas.modules.company.dto.AuthCompanyDTO;
-import com.cecgil.gestao_vagas.modules.company.services.AuthCompanyService;
+import com.cecgil.gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
+import com.cecgil.gestao_vagas.modules.candidate.services.AuthCandidateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,22 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthCompanyController {
+public class AuthCandidateController {
 
     @Autowired
-    private AuthCompanyService authCompanyService;
+    private AuthCandidateService authCandidateService;
 
-    @PostMapping("/company")
-    public ResponseEntity<Object> createAuthCompany(@RequestBody AuthCompanyDTO authCompanyDTO) {
+    @PostMapping("/candidate")
+    public ResponseEntity<Object> authCandidate(@RequestBody AuthCandidateRequestDTO authCandidateRequestDTO) {
 
         try {
-            var result = this.authCompanyService.authCompany(authCompanyDTO);
-            return ResponseEntity.ok().body(result);
+            var token = this.authCandidateService.authCandidate(authCandidateRequestDTO);
+            return ResponseEntity.ok().body(token);
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-        
-        
         
     }
     
