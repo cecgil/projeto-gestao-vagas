@@ -2,6 +2,7 @@ package com.cecgil.gestao_vagas.modules.company.services;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 import javax.naming.AuthenticationException;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.cecgil.gestao_vagas.modules.company.dto.AuthCompanyDTO;
+import com.cecgil.gestao_vagas.modules.company.dto.AuthCompanyResponseDTO;
 import com.cecgil.gestao_vagas.modules.company.repository.CompanyRespository;
 
 @Service
@@ -29,7 +31,7 @@ public class AuthCompanyService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String authCompany(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+    public AuthCompanyResponseDTO authCompany(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         var company = this.companyRepository
             .findByUsername(authCompanyDTO.getUsername())
             .orElseThrow(
@@ -44,11 +46,20 @@ public class AuthCompanyService {
         }
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
+
         var token = JWT.create().withIssuer("vagas")
-                    .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
                     .withSubject(company.getId().toString())
+                    .withExpiresAt(expiresIn)
+                    .withClaim("roles", Arrays.asList("COMPANY"))
                     .sign(algorithm);
 
-        return token;
+        var authCompanyResponseDTO = AuthCompanyResponseDTO.builder()
+                                                            .acess_tokenn(token)
+                                                            .expires_in(expiresIn.toEpochMilli())
+                                                            .build();
+
+        return authCompanyResponseDTO;
     }
 }

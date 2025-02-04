@@ -1,7 +1,6 @@
 package com.cecgil.gestao_vagas.security;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +26,7 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
                 
-                SecurityContextHolder.getContext().setAuthentication(null);
+                //SecurityContextHolder.getContext().setAuthentication(null);
                 String header = request.getHeader("Authorization");
 
                 if(request.getRequestURI().startsWith("/candidate")) {
@@ -45,7 +44,7 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
 
                         var grants = roles.stream()
                                     .map(
-                                        role -> new SimpleGrantedAuthority(role.toString())
+                                        role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())
                                     ).toList();
 
                         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
