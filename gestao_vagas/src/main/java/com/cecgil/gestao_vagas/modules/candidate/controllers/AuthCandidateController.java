@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/candidate")
 public class AuthCandidateController {
 
     @Autowired
     private AuthCandidateService authCandidateService;
 
-    @PostMapping("/candidate")
+    @PostMapping("/auth")
     public ResponseEntity<Object> authCandidate(@RequestBody AuthCandidateRequestDTO authCandidateRequestDTO) {
 
         try {
