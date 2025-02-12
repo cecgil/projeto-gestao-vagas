@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cecgil.gestao_vagas.exceptions.JobNotFoundException;
 import com.cecgil.gestao_vagas.exceptions.UserNotFoundException;
+import com.cecgil.gestao_vagas.modules.candidate.repository.ApplyJobRepository;
 import com.cecgil.gestao_vagas.modules.candidate.repository.CandidateRepository;
 import com.cecgil.gestao_vagas.modules.company.repository.JobRepository;
 
@@ -18,6 +19,9 @@ public class ApplyJobCandidateService {
     
     @Autowired
     private CandidateRepository candidateRepository;
+
+    @Autowired
+    private ApplyJobRepository applyJobRepository;
 
     public void applyJob(UUID candidateId, UUID jobId) {
         this.candidateRepository.findById(candidateId).orElseThrow(() -> {
