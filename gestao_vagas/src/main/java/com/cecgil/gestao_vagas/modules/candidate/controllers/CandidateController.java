@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cecgil.gestao_vagas.modules.candidate.entity.CandidateEntity;
+import com.cecgil.gestao_vagas.modules.candidate.services.ApplyJobCandidateService;
 import com.cecgil.gestao_vagas.modules.candidate.services.CandidateService;
 import com.cecgil.gestao_vagas.modules.candidate.services.ListAllJobsByFilterService;
 import com.cecgil.gestao_vagas.modules.candidate.services.ProfileCandidateService;
@@ -46,6 +47,9 @@ public class CandidateController {
     @Autowired
     private ListAllJobsByFilterService listAllJobsByFilterService;
 
+    @Autowired
+    private ApplyJobCandidateService applyJobCandidateService;
+
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
         try{ 
@@ -87,7 +91,22 @@ public class CandidateController {
     public List<JobEntity> getListJobFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterService.filterJob(filter);
     }
-    
+
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @SecurityRequirement(name = "jwt_auth")
+    @Operation(summary = "Inscrição do candidato para uma vaga", description = "Essa função é responsável por realizar a inscrição do candidato em uma vaga")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID jobId) {
+
+        var candidateId = request.getAttribute("candidate_id");
+
+        try {
+            var result = this.applyJobCandidateService.applyJob(UUID.fromString(candidateId.toString()), jobId);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }    
     
 
 }
