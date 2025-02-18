@@ -71,5 +71,21 @@ public class CreateJobControllerTest {
 
         System.out.println(result);
     }
+
+    public void shouldNotBeAbleToCreateNewJobIfCompanyNotFound() throws Exception {
+
+        var createJobDTO = CreateJobDTO.builder()
+        .benefits("BENEFITS_TEST")
+        .description("DESCRIPTION_TEST")
+        .level("LEVEL_TEST")
+        .build();
+
+        mvc.perform(MockMvcRequestBuilders.post("/company/job/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(TestUtils.objectToJSON(createJobDTO))
+                            .header("Authorization", TestUtils.generateToken(UUID.randomUUID(), "VAGAS_@123#")))
+                            .andExpect(MockMvcResultMatchers.status().isBadRequest());            
+
+    }
     
 }
