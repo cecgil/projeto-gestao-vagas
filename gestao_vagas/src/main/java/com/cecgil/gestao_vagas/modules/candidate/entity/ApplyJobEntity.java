@@ -38,7 +38,7 @@ public class ApplyJobEntity {
     @JoinColumn(name="jobId", insertable = false, updatable = false)
     private JobEntity jobEntity;
 
-    @Column(name="candidate_id")
+    @Column(name="candidateId")
     private UUID candidateId;
 
     private UUID jobId;
