@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class JobEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String description;
 

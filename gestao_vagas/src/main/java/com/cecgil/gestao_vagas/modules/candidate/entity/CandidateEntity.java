@@ -20,7 +20,7 @@ import lombok.Data;
 public class CandidateEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
     @NotBlank

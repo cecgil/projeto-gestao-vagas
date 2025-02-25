@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class CompanyEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @NotBlank
     @Pattern(regexp = "\\S+", message = "O campo username não deve conter espaço")

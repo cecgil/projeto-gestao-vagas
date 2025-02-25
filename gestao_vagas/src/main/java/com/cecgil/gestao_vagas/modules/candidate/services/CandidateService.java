@@ -8,6 +8,8 @@ import com.cecgil.gestao_vagas.exceptions.UserFoundException;
 import com.cecgil.gestao_vagas.modules.candidate.entity.CandidateEntity;
 import com.cecgil.gestao_vagas.modules.candidate.repository.CandidateRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CandidateService {
 
@@ -17,6 +19,7 @@ public class CandidateService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Transactional
     public CandidateEntity creteCandidate(CandidateEntity candidateEntity) {
         this.candidateRepository
         .findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail())
@@ -27,7 +30,7 @@ public class CandidateService {
         var password = this.passwordEncoder.encode(candidateEntity.getPassword());
         candidateEntity.setPassword(password);
 
-        return this.candidateRepository.save(candidateEntity);
+        return this.candidateRepository.saveAndFlush(candidateEntity);
     }
     
 }
